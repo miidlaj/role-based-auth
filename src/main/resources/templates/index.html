@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Dashboard</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css">
+</head>
+<body>
+<!--	<div align="center">-->
+<!--		<h1>User List</h1>-->
+
+<!--		<div sec:authorize="isAuthenticated()">-->
+<!--			Welcome <b><span sec:authentication="name">Username</span></b> &nbsp;-->
+<!--			<i><span sec:authentication="principal.authorities">Roles</span></i>-->
+<!--		</div>-->
+
+<!--		<form th:action="@{/logout}" method="post">-->
+<!--			<input type="submit" value="Logout" />-->
+<!--		</form>-->
+
+<!--		<div sec:authorize="hasAnyAuthority('ADMIN')">-->
+<!--		<a href="/new">Add Student</a>-->
+<!--		</div>-->
+
+<!--		<table border="1" cellpadding="10">-->
+<!--			<thead>-->
+<!--				<tr>-->
+<!--					<th>Student ID</th>-->
+<!--					<th>Student Name</th>-->
+<!--					<th>Student City</th>-->
+<!--					<th sec:authorize="hasAnyAuthority('ADMIN')">Action</th>-->
+<!--				</tr>-->
+<!--			</thead>-->
+<!--			<tbody>-->
+<!--				<tr th:each="user : ${listUser}">-->
+<!--					<td th:text="${user.id}">User ID</td>-->
+<!--					<td th:text="${user.firstName}">First Name</td>-->
+<!--					<td th:text="${user.lastName}">Last Name</td>-->
+
+<!--					<td sec:authorize="hasAuthority('ADMIN')">-->
+<!--						<div sec:authorize="hasAuthority('ADMIN')">-->
+<!--							<a th:href="@{'/edit/' + ${user.id}}">Edit</a>-->
+<!--						</div> &nbsp;&nbsp;&nbsp;-->
+<!--						<div sec:authorize="hasAnyAuthority('ADMIN')">-->
+<!--							<a th:href="@{'/delete/' + ${user.id}}">Delete</a>-->
+<!--						</div>-->
+<!--					</td>-->
+<!--				</tr>-->
+<!--			</tbody>-->
+<!--		</table>-->
+<!--	</div>-->
+
+<div class="container">
+<nav class="navbar container-fluid navbar-light bg-light justify-content-between">
+	<a class="navbar-brand">Dashboard</a>
+	<form class="form-inline">
+
+		<div class="dropdown" sec:authorize="isAuthenticated()">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" sec:authentication="principal.authorities">
+				Role
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+				<li><a class="dropdown-item" href="#" sec:authentication="name">username</a></li>
+				<li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+			</ul>
+		</div>
+	</form>
+</nav>
+</div>
+	<div class="container mt-5">
+
+		<table class="table table-striped table-bordered table-sm" id="tabledata">
+			<thead>
+			<tr class="border-bottom">
+				<th>
+					<span class="ml-2">UserID</span>
+				</th>
+				<th>
+					<span class="ml-2">Username</span>
+				</th>
+				<th>
+					<span class="ml-2">First Name</span>
+				</th>
+				<th>
+					<span class="ml-2">Last Name</span>
+				</th>
+				<th sec:authorize="hasAuthority('ADMIN')">
+					<span class="ml-4">Action</span>
+				</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr class="border-bottom" th:each="user : ${listUser}">
+				<td th:text="${user.id}">
+					<div class="p-2">
+						<span class="d-block font-weight-bold"></span>
+					</div>
+				</td>
+				<td th:text="${user.username}">
+					<div class="p-2 d-flex flex-row align-items-center mb-2">
+						<span class="font-weight-bold"></span>
+					</div>
+
+				</td>
+				<td th:text="${user.firstName}">
+					<div class="p-2">
+						<span class="font-weight-bold"></span>
+					</div>
+				</td>
+				<td th:text="${user.lastName}">
+					<div class="p-2 d-flex flex-column">
+						<span class="font-weight-bold"></span>
+					</div>
+				</td>
+				<td sec:authorize="hasAuthority('ADMIN')">
+					<div class="p-2 icons">
+						<a th:href="@{'/edit/' + ${user.id}}"><button class="btn btn-outline-dark" sec:authorize="hasAuthority('ADMIN')"><i class="fa fa-pen text-success"></i></button></a>
+						<a th:href="@{'/delete/' + ${user.id}}"><button class="btn btn-outline-dark" sec:authorize="hasAuthority('ADMIN')"><i class="fa-solid fa-user-minus text-danger"></i></button></a>
+					</div>
+				</td>
+			</tr>
+
+
+
+
+
+
+
+
+
+
+			</tbody>
+		</table>
+
+
+	</div>
+<script>
+	$(document).ready(function () {
+		$('#tabledata').DataTable();
+	});
+</script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
